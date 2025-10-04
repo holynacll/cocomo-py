@@ -1,7 +1,7 @@
 # Metadados do projeto (substitui a maior parte do setup.py)
 [project]
 name = "cocomo-cli"
-version = "1.0.0"
+version = "0.1.0"
 authors = [
   { name="Alexandre Cury Lima", email="alexandrecurylima@gmail.com" },
 ]
