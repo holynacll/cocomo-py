@@ -5,8 +5,8 @@ from rich.console import Console
 from rich.table import Table
 
 # Importa as funções dos outros módulos
-from code_analyze import analyze_directory
-from cocomo_calculator import (
+from .code_analyze import analyze_directory
+from .cocomo_calculator import (
     calculate_basic_cocomo,
     calculate_intermediate_cocomo,
     COST_DRIVERS,
