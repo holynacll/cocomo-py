@@ -3,7 +3,6 @@ from typing_extensions import Annotated
 from rich import print
 from rich.console import Console
 from rich.table import Table
-import os
 
 # Importa as funções dos outros módulos
 from code_analyze import analyze_directory
