@@ -1,0 +1,26 @@
+# Metadados do projeto (substitui a maior parte do setup.py)
+[project]
+name = "cocomopy"
+version = "1.0.0"
+authors = [
+  { name="Alexandre Cury Lima", email="alexandrecurylima@gmail.com" },
+]
+description = "Uma ferramenta CLI para estimar o custo de software usando o modelo COCOMO."
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+dependencies = [
+    "typer>=0.19.2",
+]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project.urls]
+homepage = "https://github.com/holynacll/cocomopy"
+repository = "https://github.com/holynacll/cocomopy"
+issues = "https://github.com/holynacll/cocomopy/issues"
+
+[project.scripts]
+cocomopy = "src.cocomopy.main:app"
