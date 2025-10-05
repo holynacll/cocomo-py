@@ -1,6 +1,5 @@
-# Metadados do projeto (substitui a maior parte do setup.py)
 [project]
-name = "cocomo-cli"
+name = "cocomo-py"
 version = "0.1.0"
 authors = [
   { name="Alexandre Cury Lima", email="alexandrecurylima@gmail.com" },
@@ -9,7 +8,7 @@ description = "Uma ferramenta CLI para estimar o custo de software usando o mode
 readme = "README.md"
 requires-python = ">=3.11"
 license = "MIT"
-keywords = ["Cocomo", "CLI", "Software"]
+keywords = ["Cocomo", "CLI", "Library", "Software", "Cost", "Estimation"]
 dependencies = [
     "typer>=0.19.2",
 ]
@@ -30,10 +29,15 @@ build-backend = "uv_build"
 [tool.setuptools.packages.find]
 where = ["src"]
 
+[dependency-groups]
+dev = [
+    "pytest>=8.4.2",
+]
+
 [project.urls]
-homepage = "https://github.com/holynacll/cocomo-cli"
-repository = "https://github.com/holynacll/cocomo-cli"
-issues = "https://github.com/holynacll/cocomo-cli/issues"
+homepage = "https://github.com/holynacll/cocomo-py"
+repository = "https://github.com/holynacll/cocomo-py"
+issues = "https://github.com/holynacll/cocomo-py/issues"
 
 [project.scripts]
-cocomo = "cocomo_cli.main:app"
+cocomo = "cocomo_py.cli:app"
