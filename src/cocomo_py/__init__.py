@@ -2,7 +2,7 @@
 Cocomo-py: Uma ferramenta e biblioteca Python para estimar o custo de software usando o modelo COCOMO.
 """
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 
 # Expõe as funções e classes principais para quem for usar como biblioteca
 from .calculator import calculate
