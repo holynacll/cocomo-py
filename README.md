@@ -1,82 +1,82 @@
-# **cocomo-py: Estimador de Custo de Software**
+# **cocomo-py: Software Cost Estimator**
 
-cocomo-py é uma ferramenta e biblioteca Python que estima o esforço, tempo e custo para desenvolver um projeto de software. A análise é baseada no modelo **COCOMO (Constructive Cost Model)**.
+cocomo-py is a Python tool and library that estimates the effort, time, and cost to develop a software project. The analysis is based on the **COCOMO (Constructive Cost Model)**.
 
-## **Funcionalidades**
+## **Features**
 
-* **Dupla Utilização:** Funciona como uma **CLI** pronta a usar ou como uma **biblioteca** para integrar nos seus próprios scripts.  
-* **Análise Rápida:** Calcula o custo a partir de uma pasta de código-fonte local.  
-* **Modelo COCOMO:** Utiliza o modelo COCOMO Básico e Intermediário.  
-* **Modo Interativo:** Permite ajustar a estimativa com 15 "drivers de custo" para maior precisão.  
-* **Interface Amigável:** Usa rich para exibir os resultados da CLI de forma clara.
+* **Dual Use:** Works as a ready-to-use **CLI** or as a **library** to integrate into your own scripts.
+* **Quick Analysis:** Calculates the cost from a local source code folder.
+* **COCOMO Model:** Uses the Basic and Intermediate COCOMO models.
+* **Interactive Mode:** Allows you to adjust the estimate with 15 "cost drivers" for greater accuracy.
+* **User-Friendly Interface:** Uses rich to display CLI results clearly.
 
-## **Pré-requisitos**
+## **Prerequisites**
 
-* Python 3.11+  
-* **cloc:** Uma ferramenta externa para contar linhas de código. É essencial que o cloc esteja instalado e acessível no seu PATH.  
-  * **Ubuntu/Debian:** sudo apt install cloc  
-  * **macOS (Homebrew):** brew install cloc
+* Python 3.11+
+* **cloc:** An external tool for counting lines of code. It is essential that cloc is installed and accessible in your PATH.
+  * **Ubuntu/Debian:** `sudo apt install cloc`
+  * **macOS (Homebrew):** `brew install cloc`
 
-## **Instalação**
+## **Installation**
 
-Pode instalar o cocomo-py diretamente do PyPI (quando publicado) usando pip, uv ou o seu gestor de pacotes Python preferido.
+You can install cocomo-py directly from PyPI (when published) using pip, uv, or your favorite Python package manager.
 
 ```
-# Com uv  
+# With uv
 uv pip install cocomo-py
 
-# Com pip  
+# With pip
 pip install cocomo-py
 ```
 
-Após a instalação, o comando cocomo estará disponível globalmente.
+After installation, the `cocomo` command will be available globally.
 
-## **Uso como CLI**
+## **Usage as CLI**
 
-Execute o comando cocomo seguido do caminho para a pasta do projeto.
+Run the `cocomo` command followed by the path to the project folder.
 
 ```
-### **Exemplo (Modo Básico)**
+### **Example (Basic Mode)**
 
-cocomo /caminho/para/meu/projeto```
+cocomo /path/to/my/project
 
-### **Exemplo (Modo Intermediário)**
+### **Example (Intermediate Mode)**
 
-cocomo /caminho/para/meu/projeto --intermediate --cost-per-month 9500
+cocomo /path/to/my/project --intermediate --cost-per-month 9500
 
-# Obtenha ajuda sobre os conceitos do COCOMO
+# Get help on COCOMO concepts
 cocomo explain
 ```
 
-## **Uso como Biblioteca**
+## **Usage as a Library**
 
-Importe e utilize as funções analyze_kloc e calculate nos seus projetos Python.
+Import and use the `analyze_kloc` and `calculate` functions in your Python projects.
 ```
 from cocomo_py import calculate, analyze_kloc, ProjectMode
 
 try:
-    kloc = analyze_kloc("./meu-projeto")
+    kloc = analyze_kloc("./my-project")
     result = calculate(
         kloc=kloc,
         mode=ProjectMode.SEMI_DETACHED,
         cost_per_month=10000,
         drivers={"rely": "high", "cplx": "vhigh"}
     )
-    print(f"Custo Total Estimado: R$ {result.total_cost:,.2f}")
+    print(f"Estimated Total Cost: $ {result.total_cost:,.2f}")
 except Exception as e:
-    print(f"Ocorreu um erro: {e}")
+    print(f"An error occurred: {e}")
 ```
 
-## **Desenvolvimento**
+## **Development**
 
-Para contribuir com o projeto:
+To contribute to the project:
 
-1. Clone o repositório.  
-2. Crie um ambiente virtual: `uv venv`
-3. Ative o ambiente: `source .venv/bin/activate`
-4. Instale em modo editável: `uv pip install -e .`
-5. Execute os testes com pytest: `pytest`
+1. Clone the repository.
+2. Create a virtual environment: `uv venv`
+3. Activate the environment: `source .venv/bin/activate`
+4. Install in editable mode: `uv pip install -e .`
+5. Run tests with pytest: `pytest`
 
-## **Licença**
+## **License**
 
-Este projeto está licenciado sob a Licença MIT.
+This project is licensed under the MIT License.

@@ -5,20 +5,20 @@ from .models import AnalysisError, ClocNotFoundError
 
 def analyze_kloc(project_path: Path) -> float:
     """
-    Analisa um diretório local para contar as linhas de código usando 'cloc'.
+    Analyzes a local directory to count lines of code using 'cloc'.
 
     Args:
-        project_path: O caminho para o diretório do projeto.
+        project_path: The path to the project directory.
 
     Returns:
-        O total de milhares de linhas de código ('KLOC').
+        The total thousands of lines of code ('KLOC').
 
     Raises:
-        ClocNotFoundError: Se o executável 'cloc' não for encontrado.
-        AnalysisError: Se o diretório não existir ou se houver um erro ao executar o cloc.
+        ClocNotFoundError: If the 'cloc' executable is not found.
+        AnalysisError: If the directory does not exist or if there is an error running cloc.
     """
     if not project_path.is_dir():
-        raise AnalysisError(f"O diretório especificado não existe: {project_path}")
+        raise AnalysisError(f"The specified directory does not exist: {project_path}")
 
     try:
         cloc_command = [
@@ -43,8 +43,8 @@ def analyze_kloc(project_path: Path) -> float:
 
     except FileNotFoundError:
         raise ClocNotFoundError(
-            "Comando 'cloc' não encontrado. "
-            "Por favor, instale-o e garanta que está no seu PATH do sistema."
+            "'cloc' command not found. "
+            "Please install it and ensure it is in your system's PATH."
         )
     except (subprocess.CalledProcessError, json.JSONDecodeError) as e:
-        raise AnalysisError(f"Ocorreu um erro ao analisar o código com cloc: {e}")
+        raise AnalysisError(f"An error occurred while analyzing the code with cloc: {e}")

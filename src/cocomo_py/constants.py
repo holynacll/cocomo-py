@@ -1,104 +1,104 @@
 """
-Este módulo centraliza todos os dados, constantes e descrições
-relacionadas com o modelo COCOMO (Constructive Cost Model).
+This module centralizes all data, constants, and descriptions
+related to the COCOMO (Constructive Cost Model).
 """
 
-# Dicionário com os parâmetros para os modos de projeto do COCOMO Básico.
-# As chaves 'a', 'b', 'c', 'd' são os coeficientes e expoentes usados nas fórmulas.
+# Dictionary with parameters for Basic COCOMO project modes.
+# The keys 'a', 'b', 'c', 'd' are the coefficients and exponents used in the formulas.
 COCOMO_MODES = {
     "organic": {
         "a": 2.4, "b": 1.05, "c": 2.5, "d": 0.38,
-        "name": "Orgânico",
-        "description": "Projetos relativamente pequenos e simples, desenvolvidos por equipes pequenas e experientes com bons conhecimentos do domínio. Os requisitos são flexíveis e o ambiente de desenvolvimento é estável."
+        "name": "Organic",
+        "description": "Relatively small, simple projects developed by small, experienced teams with good domain knowledge. Requirements are flexible and the development environment is stable."
     },
     "semi-detached": {
         "a": 3.0, "b": 1.12, "c": 2.5, "d": 0.35,
-        "name": "Semi-Acoplado",
-        "description": "Um projeto de tamanho e complexidade intermédios. A equipe pode ter uma mistura de níveis de experiência e os requisitos podem ser uma combinação de rígidos e flexíveis."
+        "name": "Semi-Detached",
+        "description": "A project of intermediate size and complexity. The team may have a mix of experience levels, and requirements may be a combination of rigid and flexible."
     },
     "embedded": {
         "a": 3.6, "b": 1.20, "c": 2.5, "d": 0.32,
-        "name": "Embutido",
-        "description": "Projetos desenvolvidos sob restrições apertadas de hardware, software e operacionais. São frequentemente complexos, inovadores e com requisitos rigorosos de fiabilidade e desempenho."
+        "name": "Embedded",
+        "description": "Projects developed under tight hardware, software, and operational constraints. They are often complex, innovative, and have strict reliability and performance requirements."
     }
 }
 
-# Dicionário com os 15 drivers de custo do COCOMO Intermediário.
-# Cada driver tem uma descrição e os multiplicadores de esforço para cada nível de classificação.
+# Dictionary with the 15 cost drivers for Intermediate COCOMO.
+# Each driver has a description and effort multipliers for each rating level.
 COST_DRIVERS = {
     'rely': {
-        'name': "Fiabilidade Exigida do Software",
-        'description': "Mede o grau em que o software deve funcionar de forma fiável. Uma falha pode variar de um pequeno inconveniente a uma catástrofe financeira ou humana.",
+        'name': "Required Software Reliability",
+        'description': "Measures the degree to which the software must perform reliably. A failure can range from a minor inconvenience to a financial or human catastrophe.",
         'ratings': {'vlow': 0.75, 'low': 0.88, 'nom': 1.00, 'high': 1.15, 'vhigh': 1.40}
     },
     'data': {
-        'name': "Tamanho da Base de Dados",
-        'description': "Mede o tamanho e a complexidade da base de dados utilizada em relação ao tamanho do programa.",
+        'name': "Database Size",
+        'description': "Measures the size and complexity of the database used in relation to the program size.",
         'ratings': {'low': 0.94, 'nom': 1.00, 'high': 1.08, 'vhigh': 1.16}
     },
     'cplx': {
-        'name': "Complexidade do Produto",
-        'description': "Avalia a complexidade do projeto em cinco áreas: controlo, computação, operações de E/S, interface de utilizador e gestão de dados.",
+        'name': "Product Complexity",
+        'description': "Assesses the project's complexity in five areas: control, computation, I/O operations, user interface, and data management.",
         'ratings': {'vlow': 0.70, 'low': 0.85, 'nom': 1.00, 'high': 1.15, 'vhigh': 1.30, 'xhigh': 1.65}
     },
     'time': {
-        'name': "Restrições de Tempo de Execução",
-        'description': "Mede a restrição de tempo imposta ao software durante a sua execução. Quanto maior a percentagem de tempo disponível utilizada, maior o multiplicador.",
+        'name': "Execution Time Constraints",
+        'description': "Measures the time constraint imposed on the software during its execution. The higher the percentage of available time used, the higher the multiplier.",
         'ratings': {'nom': 1.00, 'high': 1.11, 'vhigh': 1.30, 'xhigh': 1.66}
     },
     'stor': {
-        'name': "Restrições de Armazenamento Principal",
-        'description': "Mede a restrição de memória principal (RAM) imposta ao software.",
+        'name': "Main Storage Constraints",
+        'description': "Measures the main memory (RAM) constraint imposed on the software.",
         'ratings': {'nom': 1.00, 'high': 1.06, 'vhigh': 1.21, 'xhigh': 1.56}
     },
     'virt': {
-        'name': "Volatilidade da Máquina Virtual",
-        'description': "Avalia a frequência com que a plataforma de hardware e software (máquina virtual) muda durante o desenvolvimento.",
+        'name': "Virtual Machine Volatility",
+        'description': "Assesses the frequency with which the hardware and software platform (virtual machine) changes during development.",
         'ratings': {'low': 0.87, 'nom': 1.00, 'high': 1.15, 'vhigh': 1.30}
     },
     'turn': {
-        'name': "Tempo de Resposta do Computador",
-        'description': "Mede o tempo de resposta exigido ao sistema, desde a consulta até à resposta, especialmente em sistemas interativos.",
+        'name': "Computer Turnaround Time",
+        'description': "Measures the response time required of the system, from query to response, especially in interactive systems.",
         'ratings': {'low': 0.87, 'nom': 1.00, 'high': 1.07, 'vhigh': 1.15}
     },
     'acap': {
-        'name': "Capacidade do Analista",
-        'description': "Avalia a capacidade, eficiência e experiência da equipe de análise de requisitos.",
+        'name': "Analyst Capability",
+        'description': "Assesses the capability, efficiency, and experience of the requirements analysis team.",
         'ratings': {'vlow': 1.46, 'low': 1.19, 'nom': 1.00, 'high': 0.86, 'vhigh': 0.71}
     },
     'aexp': {
-        'name': "Experiência na Aplicação",
-        'description': "Avalia a experiência da equipe de desenvolvimento com o tipo de aplicação a ser desenvolvida.",
+        'name': "Application Experience",
+        'description': "Assesses the development team's experience with the type of application being developed.",
         'ratings': {'vlow': 1.29, 'low': 1.13, 'nom': 1.00, 'high': 0.91, 'vhigh': 0.82}
     },
     'pcap': {
-        'name': "Capacidade do Programador",
-        'description': "Avalia a capacidade e talento da equipe de programação.",
+        'name': "Programmer Capability",
+        'description': "Assesses the capability and talent of the programming team.",
         'ratings': {'vlow': 1.42, 'low': 1.17, 'nom': 1.00, 'high': 0.86, 'vhigh': 0.70}
     },
     'vexp': {
-        'name': "Experiência com a Máquina Virtual",
-        'description': "Avalia a experiência da equipe com a plataforma de desenvolvimento (hardware, SO, etc.).",
+        'name': "Virtual Machine Experience",
+        'description': "Assesses the team's experience with the development platform (hardware, OS, etc.).",
         'ratings': {'vlow': 1.21, 'low': 1.10, 'nom': 1.00, 'high': 0.90}
     },
     'lexp': {
-        'name': "Experiência na Linguagem de Programação",
-        'description': "Avalia a experiência da equipe com a linguagem de programação e as ferramentas utilizadas.",
+        'name': "Programming Language Experience",
+        'description': "Assesses the team's experience with the programming language and tools used.",
         'ratings': {'vlow': 1.14, 'low': 1.07, 'nom': 1.00, 'high': 0.95}
     },
     'modp': {
-        'name': "Uso de Práticas Modernas de Programação",
-        'description': "Avalia o grau de utilização de práticas modernas como programação estruturada, design top-down, etc., pela equipe.",
+        'name': "Use of Modern Programming Practices",
+        'description': "Assesses the degree to which the team uses modern practices like structured programming, top-down design, etc.",
         'ratings': {'vlow': 1.24, 'low': 1.10, 'nom': 1.00, 'high': 0.91, 'vhigh': 0.82}
     },
     'tool': {
-        'name': "Uso de Ferramentas de Software",
-        'description': "Mede o nível de utilização de ferramentas de software que auxiliam no desenvolvimento (ex: IDEs avançadas, depuradores, ferramentas de teste).",
+        'name': "Use of Software Tools",
+        'description': "Measures the level of use of software tools that assist in development (e.g., advanced IDEs, debuggers, testing tools).",
         'ratings': {'vlow': 1.24, 'low': 1.10, 'nom': 1.00, 'high': 0.91, 'vhigh': 0.83}
     },
     'sced': {
-        'name': "Cronograma de Desenvolvimento Exigido",
-        'description': "Mede o aperto do cronograma do projeto. Um cronograma acelerado aumenta o esforço necessário.",
+        'name': "Required Development Schedule",
+        'description': "Measures the tightness of the project schedule. An accelerated schedule increases the required effort.",
         'ratings': {'vlow': 1.23, 'low': 1.08, 'nom': 1.00, 'high': 1.04, 'vhigh': 1.10}
     }
 }

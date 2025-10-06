@@ -9,8 +9,8 @@ class ProjectMode(StrEnum):
 @dataclass(frozen=True)
 class CocomoResult:
     """
-    Estrutura de dados para armazenar os resultados do cálculo COCOMO.
-    É 'frozen=True' para garantir a imutabilidade dos resultados.
+    Data structure to store the results of the COCOMO calculation.
+    It is 'frozen=True' to ensure the immutability of the results.
     """
     kloc: float
     mode: ProjectMode
@@ -22,12 +22,12 @@ class CocomoResult:
     eaf: float
     is_intermediate: bool
 
-# Exceções personalizadas para a biblioteca
+# Custom exceptions for the library
 class AnalysisError(Exception):
-    """Erro genérico durante a análise do código-fonte."""
+    """Generic error during source code analysis."""
     pass
 
 class ClocNotFoundError(AnalysisError):
-    """Exceção levantada quando o comando 'cloc' não é encontrado."""
+    """Exception raised when the 'cloc' command is not found."""
     pass
 

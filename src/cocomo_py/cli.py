@@ -1,7 +1,6 @@
-"""
-Módulo da Interface de Linha de Comando (CLI) para o cocomo-py.
-Esta é a camada de apresentação que interage com o utilizador.
-"""
+Command-Line Interface (CLI) module for cocomo-py.
+This is the presentation layer that interacts with the user.
+
 from pathlib import Path
 from typing import Optional
 
@@ -9,7 +8,7 @@ import typer
 from rich.console import Console
 from rich.table import Table
 
-# Importa a lógica de negócio e as constantes
+# Import business logic and constants
 from . import __version__
 from .calculator import calculate
 from .analyzer import analyze_kloc
@@ -18,18 +17,18 @@ from .constants import COCOMO_MODES, COST_DRIVERS
 
 app = typer.Typer(
     name="cocomo-py",
-    help="Uma ferramenta CLI para estimar o custo de software usando o modelo COCOMO.",
+    help="A CLI tool to estimate software costs using the COCOMO model.",
     add_completion=False
 )
 console = Console()
 
 def version_callback(value: bool):
-    """Exibe a versão da aplicação e termina."""
+    """Displays the application version and exits."""
     if value:
-        console.print(f"cocomo-py versão: [bold green]{__version__}[/bold green]")
+        console.print(f"cocomo-py version: [bold green]{__version__}[/bold green]")
         raise typer.Exit()
 
-@app.command(name="estimate", help="Estima o esforço e custo de um projeto de software.")
+@app.command(name="estimate", help="Estimate the effort and cost of a software project.")
 def estimate_project(
     project_path: Path = typer.Argument(
         ...,
@@ -38,110 +37,110 @@ def estimate_project(
         dir_okay=True,
         readable=True,
         resolve_path=True,
-        help="O caminho para a pasta do projeto a ser analisado."
+        help="The path to the project folder to be analyzed."
     ),
     mode: ProjectMode = typer.Option(
         ProjectMode.SEMI_DETACHED,
         "--mode", "-m",
         case_sensitive=False,
-        help="O modo do projeto COCOMO."
+        help="The COCOMO project mode."
     ),
     cost_per_month: float = typer.Option(
         8000.0,
         "--cost-per-month", "-c",
-        help="Custo médio de um desenvolvedor por mês (ex: 8000.0)."
+        help="Average cost of a developer per month (e.g., 8000.0)."
     ),
     intermediate: bool = typer.Option(
         False,
         "--intermediate", "-i",
-        help="Ativa o modo interativo para o cálculo COCOMO Intermediário."
+        help="Enables interactive mode for Intermediate COCOMO calculation."
     ),
     version: Optional[bool] = typer.Option(
         None, "--version", callback=version_callback, is_eager=True,
-        help="Exibe a versão da aplicação."
+        help="Displays the application version."
     ),
 ):
     """
-    Analisa um projeto, calcula a estimativa COCOMO e exibe os resultados.
+    Analyzes a project, calculates the COCOMO estimate, and displays the results.
     """
     try:
-        with console.status("[bold green]Analisando linhas de código...[/bold green]"):
+        with console.status("[bold green]Analyzing lines of code...[/bold green]"):
             kloc = analyze_kloc(project_path)
-        console.print(f"✅ Análise concluída: [bold cyan]{kloc:.2f} KLOC[/bold cyan]")
+        console.print(f"✅ Analysis complete: [bold cyan]{kloc:.2f} KLOC[/bold cyan]")
 
         drivers = {}
         if intermediate:
-            console.print("\n--- [bold]Avaliação dos Drivers de Custo (COCOMO Intermediário)[/bold] ---")
-            console.print("Avalie cada item. Pressione Enter para usar o valor padrão 'nominal (nom)'.")
+            console.print("\n--- [bold]Cost Driver Assessment (Intermediate COCOMO)[/bold] ---")
+            console.print("Rate each item. Press Enter to use the default value 'nominal (nom)'.")
             for code, details in COST_DRIVERS.items():
                 valid_ratings = list(details['ratings'].keys())
                 console.print(f"-> [yellow]{details['name']} ({code.upper()})[/yellow]", end=" ")
                 prompt_text = f"[{'/'.join(valid_ratings)}]"
                 rating = typer.prompt(prompt_text, default="nom", show_default=True)
                 if rating.lower() not in valid_ratings:
-                    console.print(f"[yellow]Aviso: Classificação '{rating}' inválida para '{details['name']}'. Usando 'nom'.[/yellow]")
+                    console.print(f"[yellow]Warning: Invalid rating '{rating}' for '{details['name']}'. Using 'nom'.[/yellow]")
                     rating = "nom"
                 if rating.lower() != "nom":
                     drivers[code] = rating
 
-        # Calcula o resultado
+        # Calculate the result
         result = calculate(kloc, mode, cost_per_month, drivers)
 
-        # Exibe a tabela de resultados
-        console.print("\n--- [bold green]Resultado da Estimativa COCOMO[/bold green] ---")
+        # Display the results table
+        console.print("\n--- [bold green]COCOMO Estimation Result[/bold green] ---")
         table = Table(show_header=False)
-        table.add_column("Métrica", style="cyan")
-        table.add_column("Valor", style="magenta")
+        table.add_column("Metric", style="cyan")
+        table.add_column("Value", style="magenta")
 
-        table.add_row("Modo do Projeto", COCOMO_MODES[result.mode]['name'])
-        table.add_row("Linhas de Código (KLOC)", f"{result.kloc:.2f}")
+        table.add_row("Project Mode", COCOMO_MODES[result.mode]['name'])
+        table.add_row("Lines of Code (KLOC)", f"{result.kloc:.2f}")
         if result.is_intermediate:
-            table.add_row("Fator de Ajuste de Esforço (EAF)", f"{result.eaf:.3f}")
+            table.add_row("Effort Adjustment Factor (EAF)", f"{result.eaf:.3f}")
         
-        table.add_row("Esforço Estimado", f"{result.effort_person_months:.2f} pessoas-mês")
-        table.add_row("Tempo de Desenvolvimento", f"{result.development_time_months:.2f} meses")
-        table.add_row("Pessoas Recomendadas", f"{result.people_required:.2f} pessoas")
-        table.add_row("Custo por Mês (Unitário)", f"R$ {result.cost_per_month:,.2f}".replace(',', '.'))
-        table.add_row("[bold]Custo Total Estimado[/bold]", f"[bold]R$ {result.total_cost:,.2f}[/bold]".replace(',', '.'))
+        table.add_row("Estimated Effort", f"{result.effort_person_months:.2f} person-months")
+        table.add_row("Development Time", f"{result.development_time_months:.2f} months")
+        table.add_row("Recommended People", f"{result.people_required:.2f} people")
+        table.add_row("Cost per Month (Unit)", f"$ {result.cost_per_month:,.2f}")
+        table.add_row("[bold]Total Estimated Cost[/bold]", f"[bold]$ {result.total_cost:,.2f}[/bold]")
 
         console.print(table)
 
     except ClocNotFoundError:
-        console.print("[bold red]Erro: O comando 'cloc' não foi encontrado.[/bold red]")
-        console.print("Por favor, instale o 'cloc' e certifique-se de que está no seu PATH.")
+        console.print("[bold red]Error: The 'cloc' command was not found.[/bold red]")
+        console.print("Please install 'cloc' and ensure it is in your PATH.")
         raise typer.Exit(code=1)
     except AnalysisError as e:
-        console.print(f"[bold red]Erro durante a análise: {e}[/bold red]")
+        console.print(f"[bold red]Error during analysis: {e}[/bold red]")
         raise typer.Exit(code=1)
     except Exception as e:
-        console.print(f"[bold red]Ocorreu um erro inesperado: {e}[/bold red]")
+        console.print(f"[bold red]An unexpected error occurred: {e}[/bold red]")
         raise typer.Exit(code=1)
 
 
-@app.command(name="explain", help="Explica os conceitos do modelo COCOMO.")
+@app.command(name="explain", help="Explains the concepts of the COCOMO model.")
 def explain_cocomo(
     topic: str = typer.Argument(
         None,
         case_sensitive=False,
-        help="O tópico a ser explicado ('modes' ou 'drivers'). Se omitido, explica ambos."
+        help="The topic to be explained ('modes' or 'drivers'). If omitted, explains both."
     )
 ):
     """
-    Exibe descrições detalhadas sobre os modos de projeto e os drivers de custo do COCOMO.
+    Displays detailed descriptions of COCOMO project modes and cost drivers.
     """
     if not topic or topic == "modes":
-        console.print("\n--- [bold green]Modos de Projeto COCOMO[/bold green] ---")
+        console.print("\n--- [bold green]COCOMO Project Modes[/bold green] ---")
         for mode, details in COCOMO_MODES.items():
             console.print(f"\n[bold cyan]{details['name']} ({mode})[/bold cyan]")
             console.print(f"{details['description']}")
 
     if not topic or topic == "drivers":
-        console.print("\n--- [bold green]Drivers de Custo COCOMO[/bold green] ---")
+        console.print("\n--- [bold green]COCOMO Cost Drivers[/bold green] ---")
         for code, details in COST_DRIVERS.items():
             ratings_str = ", ".join(details['ratings'].keys())
             console.print(f"\n[bold cyan]{details['name']} ({code.upper()})[/bold cyan]")
             console.print(f"{details['description']}")
-            console.print(f"[italic]Classificações: {ratings_str}[/italic]")
+            console.print(f"[italic]Ratings: {ratings_str}[/italic]")
 
 if __name__ == "__main__":
     app()

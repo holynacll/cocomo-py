@@ -1,6 +1,6 @@
 """
-Módulo principal para os cálculos do COCOMO.
-Esta é a lógica de negócio principal da biblioteca.
+Main module for COCOMO calculations.
+This is the core business logic of the library.
 """
 from typing import Dict, Optional
 
@@ -14,27 +14,27 @@ def calculate(
     drivers: Optional[Dict[str, str]] = None
 ) -> CocomoResult:
     """
-    Calcula a estimativa de esforço, tempo e custo usando o modelo COCOMO.
+    Calculates the effort, time, and cost estimate using the COCOMO model.
 
     Args:
-        kloc: Milhares de linhas de código (Kilo Lines of Code).
-        mode: O modo do projeto ('organic', 'semi-detached', 'embedded').
-        cost_per_month: O custo médio mensal de um desenvolvedor.
-        drivers: Um dicionário opcional com as classificações dos drivers de custo
-                 para o cálculo Intermediário. Ex: {'rely': 'high', 'cplx': 'low'}
+        kloc: Kilo Lines of Code.
+        mode: The project mode ('organic', 'semi-detached', 'embedded').
+        cost_per_month: The average monthly cost of a developer.
+        drivers: An optional dictionary with the ratings of the cost drivers
+                 for the Intermediate calculation. Ex: {'rely': 'high', 'cplx': 'low'}
 
     Returns:
-        Um objeto CocomoResult com todos os dados da estimativa.
+        A CocomoResult object with all the estimation data.
     """
     if mode not in COCOMO_MODES:
-        raise ValueError(f"Modo '{mode}' inválido. Escolha entre {', '.join(COCOMO_MODES.keys())}")
+        raise ValueError(f"Invalid mode '{mode}'. Choose from {', '.join(COCOMO_MODES.keys())}")
 
     params = COCOMO_MODES[mode]
 
-    # 1. Calcular o Esforço Nominal (base para ambos os modelos)
+    # 1. Calculate Nominal Effort (base for both models)
     nominal_effort = params['a'] * (kloc ** params['b'])
 
-    # 2. Calcular o EAF se for um cálculo intermediário
+    # 2. Calculate EAF if it is an intermediate calculation
     eaf = 1.0
     if drivers:
         for driver_code, rating in drivers.items():
@@ -42,15 +42,15 @@ def calculate(
             rating_lower = rating.lower()
             if driver_code_lower in COST_DRIVERS and rating_lower in COST_DRIVERS[driver_code_lower]['ratings']:
                 eaf *= COST_DRIVERS[driver_code_lower]['ratings'][rating_lower]
-            # Ignora drivers ou ratings inválidos, mantendo o multiplicador 1.0
+            # Ignores invalid drivers or ratings, keeping the multiplier 1.0
     
-    # 3. Calcular o Esforço Ajustado
+    # 3. Calculate Adjusted Effort
     adjusted_effort = nominal_effort * eaf
 
-    # 4. Calcular o tempo de desenvolvimento com base no esforço ajustado
+    # 4. Calculate development time based on adjusted effort
     dev_time_months = params['c'] * (adjusted_effort ** params['d'])
 
-    # 5. Calcular o número de pessoas e o custo total
+    # 5. Calculate the number of people and the total cost
     people_required = adjusted_effort / dev_time_months if dev_time_months > 0 else 0
     total_cost = adjusted_effort * cost_per_month
 

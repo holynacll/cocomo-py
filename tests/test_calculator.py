@@ -2,14 +2,14 @@ import pytest
 from cocomo_py.calculator import calculate
 from cocomo_py.models import ProjectMode
 
-# Fixture para dados de teste comuns
+# Fixture for common test data
 @pytest.fixture
 def sample_drivers():
-    """Retorna um dicionário de drivers para o modo intermediário."""
+    """Returns a dictionary of drivers for intermediate mode."""
     return {"rely": "high", "cplx": "vhigh"}
 
 def test_calculate_basic_organic():
-    """Testa um cálculo simples no modo Orgânico."""
+    """Tests a simple calculation in Organic mode."""
     result = calculate(
         kloc=10,
         mode=ProjectMode.ORGANIC,
@@ -24,7 +24,7 @@ def test_calculate_basic_organic():
     assert result.total_cost == pytest.approx(269315.37, rel=1e-2)
 
 def test_calculate_basic_semi_detached():
-    """Testa um cálculo simples no modo Semi-Acoplado."""
+    """Tests a simple calculation in Semi-Detached mode."""
     result = calculate(
         kloc=50,
         mode=ProjectMode.SEMI_DETACHED,
@@ -36,7 +36,7 @@ def test_calculate_basic_semi_detached():
     assert result.total_cost == pytest.approx(1918923.43, rel=1e-2)
 
 def test_calculate_basic_embedded():
-    """Testa um cálculo simples no modo Embutido."""
+    """Tests a simple calculation in Embedded mode."""
     result = calculate(
         kloc=100,
         mode=ProjectMode.EMBEDDED,
@@ -48,7 +48,7 @@ def test_calculate_basic_embedded():
     assert result.total_cost == pytest.approx(10855110.84, rel=1e-2)
 
 def test_calculate_intermediate_with_drivers(sample_drivers):
-    """Testa um cálculo intermediário com drivers de custo."""
+    """Tests an intermediate calculation with cost drivers."""
     result = calculate(
         kloc=50,
         mode=ProjectMode.SEMI_DETACHED,
@@ -62,8 +62,8 @@ def test_calculate_intermediate_with_drivers(sample_drivers):
     assert result.total_cost == pytest.approx(2868790.64, rel=1e-2)
 
 def test_invalid_mode():
-    """Testa se uma exceção é levantada para um modo inválido."""
-    with pytest.raises(ValueError, match="Modo 'invalid-mode' inválido"):
+    """Tests that an exception is raised for an invalid mode."""
+    with pytest.raises(ValueError, match="Invalid mode 'invalid-mode'"):
         calculate(
             kloc=10,
             mode="invalid-mode", # type: ignore

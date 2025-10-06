@@ -4,7 +4,7 @@ version = "0.2.0"
 authors = [
   { name="Alexandre Cury Lima", email="alexandrecurylima@gmail.com" },
 ]
-description = "Uma ferramenta CLI para estimar o custo de software usando o modelo COCOMO."
+description = "A CLI tool to estimate software cost using the COCOMO model."
 readme = "README.md"
 requires-python = ">=3.11"
 license = "MIT"
