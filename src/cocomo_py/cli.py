@@ -1,5 +1,7 @@
+"""
 Command-Line Interface (CLI) module for cocomo-py.
 This is the presentation layer that interacts with the user.
+"""
 
 from pathlib import Path
 from typing import Optional
