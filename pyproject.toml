@@ -9,9 +9,7 @@ readme = "README.md"
 requires-python = ">=3.11"
 license = "MIT"
 keywords = ["Cocomo", "CLI", "Library", "Software", "Cost", "Estimation"]
-dependencies = [
-    "typer>=0.19.2",
-]
+dependencies = []
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
@@ -41,3 +39,8 @@ issues = "https://github.com/holynacll/cocomo-py/issues"
 
 [project.scripts]
 cocomo = "cocomo_py.cli:app"
+
+[project.optional-dependencies]
+cli = [
+    "typer>=0.19.2",
+]

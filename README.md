@@ -19,9 +19,13 @@ cocomo-py is a Python tool and library that estimates the effort, time, and cost
 
 ## **Installation**
 
-You can install cocomo-py directly from PyPI (when published) using pip, uv, or your favorite Python package manager.
+`cocomo-py` can be installed as a library alone or with the command-line interface (CLI).
 
-```
+### **Library Only**
+
+To use `cocomo-py` as a library in your projects, install it with:
+
+```bash
 # With uv
 uv pip install cocomo-py
 
@@ -29,9 +33,21 @@ uv pip install cocomo-py
 pip install cocomo-py
 ```
 
-After installation, the `cocomo` command will be available globally.
+### **Library and CLI**
+
+To use the `cocomo` command-line tool, you must install the package with the `[cli]` extra, which includes `Typer` and its dependencies.
+
+```bash
+# With uv
+uv pip install cocomo-py[cli]
+
+# With pip
+pip install cocomo-py[cli]
+```
 
 ## **Usage as CLI**
+
+> **Note:** To use the CLI, you must have installed the package with the `[cli]` extra (e.g., `pip install cocomo-py[cli]`).
 
 Run the `cocomo` command followed by the path to the project folder.
 

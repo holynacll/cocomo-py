@@ -16,9 +16,11 @@ wheels = [
 
 [[package]]
 name = "cocomo-py"
-version = "0.1.0"
+version = "0.2.0"
 source = { editable = "." }
-dependencies = [
+
+[package.optional-dependencies]
+cli = [
     { name = "typer" },
 ]
 
@@ -28,7 +30,8 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "typer", specifier = ">=0.19.2" }]
+requires-dist = [{ name = "typer", marker = "extra == 'cli'", specifier = ">=0.19.2" }]
+provides-extras = ["cli"]
 
 [package.metadata.requires-dev]
 dev = [{ name = "pytest", specifier = ">=8.4.2" }]
